@@ -1,11 +1,7 @@
-import { PiPriceProvider } from '../context/PiPriceContext';
+import React from 'react';
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <PiPriceProvider>
-      <Component {...pageProps} />
-    </PiPriceProvider>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;
