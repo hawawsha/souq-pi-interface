@@ -1,15 +1,5 @@
-{
-  "name": "souq-pi-interface",
-  "version": "1.0.0",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "next": "15.2.8",
-    "react": "latest",
-    "react-dom": "latest",
-    "airtable": "latest"
-  }
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start"
 }
