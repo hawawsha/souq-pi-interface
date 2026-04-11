@@ -1,9 +1,38 @@
-export default function handler(req, res) {
-  const products = [
-    { id: 1, name: 'منتج 1', price: 10, category: 'إلكترونيات', image: '' },
-    { id: 2, name: 'منتج 2', price: 20, category: 'ملابس', image: '' },
-    { id: 3, name: 'منتج 3', price: 30, category: 'إلكترونيات', image: '' },
-  ];
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  return res.status(200).json({ success: true, products });
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_NEW}/Products`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_TOKEN_NEW}`
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    const products = data.records.map(record => ({
+      id: record.id,
+      name: record.fields['Name'],
+      description: record.fields['Description'],
+      priceInPi: record.fields['Price in Pi'],
+      priceInUSD: record.fields['Price in USD'],
+      category: record.fields['Category'],
+      image: record.fields['Image URL'] || '',
+      seller: record.fields['Seller Name'],
+      status: record.fields['Status']
+    }));
+
+    return res.status(200).json({ success: true, products });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
 }
